@@ -252,8 +252,8 @@ public class terrainMap : MonoBehaviour
         uvs = new Vector2[num_vert];
 
         //generate perlin or fractal noise here
-        perlinHeight = generatePerlinNoise(250, 5);
-        //float[,] perlinHeight = fractal_gen(subdivision, 5, 5);
+        //perlinHeight = generatePerlinNoise(250, 5);
+        perlinHeight = fractal_gen(subdivision, 5, 5);
 
         for (int i = 0; i < stride-1; i++)
         {

@@ -61,13 +61,20 @@ public class boidController : MonoBehaviour
             status.velocity = alignment * 1.5f + cohesion * 1.5f + separation * 4f + leader;
             status.velocity = status.velocity.normalized;
             status.position += status.velocity * .15f;
+
+            float noise_dist; 
             
             //terrain collision prevention
             if(status.position.x < terrainMap.subdivision && status.position.z < terrainMap.subdivision && status.position.x >= 0 && status.position.z >= 0) {
-                if(status.position.y <= terrainMap.perlinHeight[(int)status.position.z, (int)status.position.x]+1f) {
-                    status.position.y = status.position.y + terrainMap.perlinHeight[(int)status.position.z, (int)status.position.x];
-                    //Debug.Log("got here");
+                noise_dist = goalMarker.transform.position.y - terrainMap.perlinHeight[(int)status.position.x, (int)status.position.z];
+                if((status.position.y * -1) >= noise_dist) {
+                    status.position.y += terrainMap.perlinHeight[(int)status.position.x, (int)status.position.z];
                 }
+                //if(status.position.y <= terrainMap.perlinHeight[(int)status.position.z, (int)status.position.x]) {
+                    
+                    //status.position.y += (terrainMap.perlinHeight[(int)status.position.z, (int)status.position.x] - status.position.y) + 0.1f;
+                    //Debug.Log("got here");
+                //}
             }            
 
             status.boidObject.transform.LookAt(status.position);
