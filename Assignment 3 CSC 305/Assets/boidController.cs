@@ -57,25 +57,41 @@ public class boidController : MonoBehaviour
             Vector3 cohesion = calculate_cohesion(status);
             Vector3 separation = calculate_separation(status);
             Vector3 leader = goalMarker.transform.position - status.position;
+            Vector3 terrain_colide = Vector3.zero;
 
-            status.velocity = alignment * 1.5f + cohesion * 1.5f + separation * 4f + leader;
+            float x = status.position.x;
+            float z = status.position.z;
+            if(x < 5f && z < 5f && x >= -5f && z >= -5f) {
+                x = (x + 5f) * 25f;
+                z = (z + 5f) * 25f;
+                if(status.position.y <= terrainMap.perlinHeight[(int)x, (int)z] + 0.3f) {
+                    
+                    status.position.y += terrainMap.perlinHeight[(int)x, (int)z];
+                }
+                
+                //float noise_dist = terrainMap.perlinHeight[(int)x, (int)z];
+                //terrain_colide = new Vector3(0, noise_dist, 0);
+            }            
+
+            status.velocity += alignment * 1.5f + cohesion * 1.5f + separation * 6f + leader;
             status.velocity = status.velocity.normalized;
             status.position += status.velocity * .15f;
 
-            float noise_dist; 
+            //float noise_dist; 
             
             //terrain collision prevention
-            if(status.position.x < terrainMap.subdivision && status.position.z < terrainMap.subdivision && status.position.x >= 0 && status.position.z >= 0) {
-                noise_dist = goalMarker.transform.position.y - terrainMap.perlinHeight[(int)status.position.x, (int)status.position.z];
+            /*if(status.position.x < terrainMap.subdivision && status.position.z < terrainMap.subdivision && status.position.x >= 0 && status.position.z >= 0) {
+                status.position.y += terrainMap.perlinHeight[(int)status.position.x, (int)status.position.z];
+                /* noise_dist = goalMarker.transform.position.y - terrainMap.perlinHeight[(int)status.position.x, (int)status.position.z];
                 if((status.position.y * -1) >= noise_dist) {
                     status.position.y += terrainMap.perlinHeight[(int)status.position.x, (int)status.position.z];
-                }
+                }*/
                 //if(status.position.y <= terrainMap.perlinHeight[(int)status.position.z, (int)status.position.x]) {
                     
                     //status.position.y += (terrainMap.perlinHeight[(int)status.position.z, (int)status.position.x] - status.position.y) + 0.1f;
                     //Debug.Log("got here");
                 //}
-            }            
+            //}      
 
             status.boidObject.transform.LookAt(status.position);
             status.boidObject.transform.Rotate(0, 90, 90);
@@ -126,6 +142,7 @@ public class boidController : MonoBehaviour
 
     Vector3 calculate_separation (BoidStatus boid) {
         int neighbour_count = 0;
+        //int terrain = 0;
         Vector3 point = boid.position;
         Vector3 velocity = new Vector3(0, 0, 0);
         for(int i = 0; i < statusList.Count; ++i) {
@@ -136,6 +153,11 @@ public class boidController : MonoBehaviour
                 }
             }
         }
+        /*if(point.x >= 0 && point.z >= 0 && point.x < terrainMap.subdivision && point.z < terrainMap.subdivision) {
+            velocity.y += terrainMap.perlinHeight[(int)point.z , (int)point.x] - point.y;
+            terrain++;
+            Debug.Log("Got here");
+        }*/     
         if(neighbour_count != 0) {
             velocity /= neighbour_count;
             velocity *= -1;

@@ -18,7 +18,7 @@ public class boidMovement : MonoBehaviour
         counter = 0;
         spline_points = new Vector3[4] {new Vector3(4f, 2f, 0f), new Vector3(0f, 3f, 4f), new Vector3(-4f, 2f, 0), new Vector3(0f, 3f, -4f)};
         create_spline_table();
-        gameObject.transform.position = new Vector3(4f, 3f, 4f);
+        gameObject.transform.position = new Vector3(3f, 3f, 3f);
     }
 
     // Update is called once per frame
