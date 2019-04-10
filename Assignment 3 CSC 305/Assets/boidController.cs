@@ -68,9 +68,6 @@ public class boidController : MonoBehaviour
                     
                     status.position.y += terrainMap.perlinHeight[(int)x, (int)z];
                 }
-                
-                //float noise_dist = terrainMap.perlinHeight[(int)x, (int)z];
-                //terrain_colide = new Vector3(0, noise_dist, 0);
             }            
 
             status.velocity += alignment * 1.5f + cohesion * 1.5f + separation * 6f + leader;
